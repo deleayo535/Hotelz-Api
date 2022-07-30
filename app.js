@@ -12,8 +12,9 @@ const cors = require('cors');
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 const userRouter = require('./routes/userRoutes');
+const authRouter = require('./routes/authRoutes');
 const roomRouter = require('./routes/roomRoutes');
-// const bookingRouter = require('./routes/bookingRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 // const bookingController = require('./controllers/bookingController');
 
 // Start express app
@@ -60,9 +61,10 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES;
+app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/rooms', roomRouter);
-// app.use('/api/v1/bookings', bookingRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

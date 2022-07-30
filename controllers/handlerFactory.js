@@ -66,7 +66,8 @@ exports.getOne = (Model, popOptions) =>
 
 exports.getAll = Model =>
   catchAsync(async (req, res, next) => {
-    const query = Model.find({});
+    // console.log(req.query);
+    const query = Model.find({ ...req.query });
     const doc = await query;
 
     res.status(200).json({
