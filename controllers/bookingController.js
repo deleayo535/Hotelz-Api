@@ -1,33 +1,33 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const Tour = require('../models/tourModel');
+const Room = require('../models/roomModel');
 const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
-  // 1) Get the currently booked tour
-  const tour = await Tour.findById(req.params.tourId);
-  // console.log(tour);
+  // 1) Get the currently booked room
+  const room = await Room.findById(req.params.roomId);
+  // console.log(room);
 
   // 2) Create checkout session
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
-    // success_url: `${req.protocol}://${req.get('host')}/my-tours/?tour=${
-    //   req.params.tourId
-    // }&user=${req.user.id}&price=${tour.price}`,
-    success_url: `${req.protocol}://${req.get('host')}/my-tours?alert=booking`,
-    cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
+    // success_url: `${req.protocol}://${req.get('host')}/my-rooms/?room=${
+    //   req.params.roomId
+    // }&user=${req.user.id}&price=${room.price}`,
+    success_url: `${req.protocol}://${req.get('host')}/my-rooms?alert=booking`,
+    cancel_url: `${req.protocol}://${req.get('host')}/room/${room.slug}`,
     customer_email: req.user.email,
-    client_reference_id: req.params.tourId,
+    client_reference_id: req.params.roomId,
     line_items: [
       {
-        name: `${tour.name} Tour`,
-        description: tour.summary,
+        name: `${room.name} Room`,
+        description: room.summary,
         images: [
-          `${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`
+          `${req.protocol}://${req.get('host')}/img/rooms/${room.imageCover}`
         ],
-        amount: tour.price * 100,
+        amount: room.price * 100,
         currency: 'usd',
         quantity: 1
       }
@@ -42,10 +42,10 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 });
 
 const createBookingCheckout = async session => {
-  const tour = session.client_reference_id;
+  const room = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.display_items[0].amount / 100;
-  await Booking.create({ tour, user, price });
+  await Booking.create({ room, user, price });
 };
 
 exports.webhookCheckout = (req, res, next) => {
