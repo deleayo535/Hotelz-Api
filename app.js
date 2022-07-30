@@ -12,6 +12,7 @@ const cors = require('cors');
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 const userRouter = require('./routes/userRoutes');
+const roomRouter = require('./routes/roomRoutes');
 // const bookingRouter = require('./routes/bookingRoutes');
 // const bookingController = require('./controllers/bookingController');
 
@@ -60,6 +61,7 @@ app.use((req, res, next) => {
 
 // 3) ROUTES;
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/rooms', roomRouter);
 // app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {

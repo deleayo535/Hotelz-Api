@@ -4,7 +4,7 @@ const bookingSchema = new mongoose.Schema({
   room: {
     type: mongoose.Schema.ObjectId,
     ref: 'Tour',
-    required: [true, 'Booking must belong to a Roomp!']
+    required: [true, 'Booking must belong to a Room!']
   },
   user: {
     type: mongoose.Schema.ObjectId,
