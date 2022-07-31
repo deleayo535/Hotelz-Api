@@ -6,7 +6,6 @@ const VERIFY_PAYMENT = 'https://api.paystack.co/transaction/verify';
 
 exports.initPayment = async (req, res, next) => {
   const { email, amount, callback_url, room, price, user } = req.body;
-  console.log('reference-data', req.body);
 
   try {
     const { data } = await axios.post(
@@ -18,12 +17,10 @@ exports.initPayment = async (req, res, next) => {
       },
       {
         headers: {
-          Authorization: `Bearer sk_test_bf8ff3737da24ed599398fe5c7071ae6209e9c54`
+          Authorization: `Bearer sk_test_2d7c49d1163ac466d9cc7bd27672e21f1d440e51`
         }
       }
     );
-    console.log('reference-data', data);
-    console.log('reference-data', user, room);
 
     //create booking history
     const { reference } = data.data;
@@ -42,8 +39,6 @@ exports.initPayment = async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.log('error', error);
-
     res.status(500).json({
       status: 'failed',
       data: {
@@ -57,17 +52,14 @@ exports.initPayment = async (req, res, next) => {
 exports.verifyPayment = async (req, res, next) => {
   try {
     //verify payment
-    console.log('requestPayload', req.body);
     const { data } = await axios.get(
       `${VERIFY_PAYMENT}/${req.body.reference}`,
       {
         headers: {
-          Authorization: `Bearer sk_test_bf8ff3737da24ed599398fe5c7071ae6209e9c54`
+          Authorization: `Bearer sk_test_2d7c49d1163ac466d9cc7bd27672e21f1d440e51`
         }
       }
     );
-
-    console.log('data', data);
 
     await Booking.findOneAndUpdate(
       { reference: req.body.reference },
