@@ -15,13 +15,18 @@ const bookingSchema = new mongoose.Schema({
     type: Number,
     require: [true, 'Booking must have a price.']
   },
+
+  reference: {
+    type: String,
+    require: [true, 'Booking must have a reference.']
+  },
   createdAt: {
     type: Date,
     default: Date.now()
   },
   paid: {
     type: Boolean,
-    default: true
+    default: false
   }
 });
 

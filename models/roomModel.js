@@ -15,13 +15,13 @@ const roomSchema = new mongoose.Schema({
   size: {
     type: String
   },
-  Capacity: {
+  capacity: {
     type: String
   },
-  Bed: {
+  bed: {
     type: String
   },
-  Services: {
+  services: {
     type: String
   }
 });
