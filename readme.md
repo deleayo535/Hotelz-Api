@@ -1,3 +1,3 @@
-# Hotel booking Application
+# Hotel booking Api
 
 Built using modern technologies: node.js, express, mongoDB, mongoose and friends 😁
