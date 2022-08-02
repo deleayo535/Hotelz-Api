@@ -5,14 +5,14 @@ const INIT_PAYMENT = 'https://api.paystack.co/transaction/initialize';
 const VERIFY_PAYMENT = 'https://api.paystack.co/transaction/verify';
 
 exports.initPayment = async (req, res, next) => {
-  const { email, amount, callback_url, room, price, user } = req.body;
+  const { email, amount, callback_url, room, user } = req.body;
 
   try {
     const { data } = await axios.post(
       INIT_PAYMENT,
       {
         email,
-        amount,
+        amount: amount * 100,
         callback_url
       },
       {
@@ -26,10 +26,11 @@ exports.initPayment = async (req, res, next) => {
     const { reference } = data.data;
     await Booking.create({
       room,
-      price,
+      price: amount,
       user,
       reference
     });
+    console.log(room, user, reference);
 
     res.status(200).json({
       status: 'success',
